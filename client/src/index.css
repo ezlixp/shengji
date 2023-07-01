@@ -1,0 +1,37 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+html,
+body {
+	max-width: 100%;
+	overflow-x: hidden;
+	background-color: #212226;
+}
+
+a {
+	text-decoration: none;
+}
+
+li {
+	list-style: none;
+}
+
+.z-100 {
+	z-index: -100;
+}
+
+.z100 {
+	z-index: 100;
+	position: relative;
+}
+
+.sticky {
+	position: fixed;
+}
+
+.content {
+	padding-top: 60px;
+}

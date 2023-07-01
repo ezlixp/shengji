@@ -1,0 +1,29 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "dev",
+			"path": "client",
+			"problemMatcher": [],
+			"label": "dev",
+			"detail": "vite"
+		},
+		{
+			"type": "npm",
+			"script": "build:dev",
+			"path": "client",
+			"problemMatcher": [],
+			"label": "build dev",
+			"detail": "vite"
+		},
+		{
+			"type": "npm",
+			"script": "build:prod",
+			"path": "client",
+			"problemMatcher": [],
+			"label": "build prod",
+			"detail": "vite"
+		}
+	]
+}
