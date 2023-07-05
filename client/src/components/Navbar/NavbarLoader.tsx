@@ -1,6 +1,6 @@
 import { useAuth } from "../../contexts/authContext";
-import NavbarLoggedIn from "./NavbarLoggedIn";
-import NavbarLoggedOut from "./NavbarLoggedOut";
+import NavbarLoggedIn from "./LoggedIn/NavbarLoggedIn.tsx";
+import NavbarLoggedOut from "./LoggedOut/NavbarLoggedOut.tsx";
 import defaultProps from "../../types/defaultProps";
 
 export default function NavbarLoader(props: defaultProps) {

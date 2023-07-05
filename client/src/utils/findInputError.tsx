@@ -1,4 +1,4 @@
-import { FieldErrors } from "../types/formTypes";
+import { FieldErrors } from "../types/hookFormTypes";
 
 export default function findInputError(errors: FieldErrors, name: string) {
 	const filtered = Object.keys(errors)

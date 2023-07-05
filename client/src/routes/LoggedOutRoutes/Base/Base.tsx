@@ -1,6 +1,6 @@
-import styles from "./Home.module.css";
+import styles from "./Base.module.css";
 
-export default function Home() {
+export default function Base() {
 	// const { logout, currentUser } = useAuth();
 	// const [error, setError] = useState("");
 	// const navigate = useNavigate();

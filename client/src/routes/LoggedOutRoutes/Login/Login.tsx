@@ -1,14 +1,13 @@
-import { useEffect, useRef, useState } from "react";
-import { useAuth } from "../../contexts/authContext";
+import { useState } from "react";
+import { useAuth } from "../../../contexts/authContext";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./Login.module.css";
-import Axios from "axios";
 import { FormProvider, useForm } from "react-hook-form";
-import Input from "../../components/Input/Input";
+import Input from "../../../components/Input/Input";
 import {
 	email_validation,
 	password_validation,
-} from "../../utils/inputValidations";
+} from "../../../utils/inputValidations";
 
 export default function Login() {
 	const methods = useForm();
@@ -17,11 +16,6 @@ export default function Login() {
 	const [loading, setLoading] = useState(false);
 	const navigate = useNavigate();
 
-	// useEffect(() => {
-	// 	Axios.get("http://localhost:3001/api/get").then((response) => {
-	// 		console.log(response.data);
-	// 	});
-	// });
 	const onSubmit = methods.handleSubmit(async (data) => {
 		console.log(data);
 		methods.reset();

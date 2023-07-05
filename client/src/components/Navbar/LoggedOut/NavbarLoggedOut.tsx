@@ -45,17 +45,6 @@ export default function NavbarLoggedOut() {
 									setActive(false);
 									setHide(true);
 								}}
-								to="/"
-							>
-								Home
-							</Link>
-						</li>
-						<li>
-							<Link
-								onClick={() => {
-									setActive(false);
-									setHide(true);
-								}}
 								to="/login"
 							>
 								Login

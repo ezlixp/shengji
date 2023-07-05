@@ -1,8 +1,8 @@
 import { useState } from "react";
 import styles from "./NavbarLoggedIn.module.css";
-import { useAuth } from "../../contexts/authContext";
+import { useAuth } from "../../../contexts/authContext.tsx";
 import { Link, useNavigate } from "react-router-dom";
-import pfp from "../../assets/blank-pfp.webp";
+import pfp from "../../../assets/blank-pfp.webp";
 
 export default function NavbarLoggedIn() {
 	const { logout } = useAuth();
@@ -31,6 +31,9 @@ export default function NavbarLoggedIn() {
 
 				<div className={styles.menu}>
 					<ul>
+						<li>
+							<Link to="/home">Home</Link>
+						</li>
 						<li className={styles["user-services"]}>
 							<button
 								onClick={() =>

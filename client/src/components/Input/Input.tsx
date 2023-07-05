@@ -30,7 +30,6 @@ export default function Input({
 		register,
 		formState: { errors },
 	} = useFormContext();
-	console.log(errors);
 	const inputError: InputErrorType = findInputError(errors, label);
 	const isInvalid = isFormInvalid(inputError);
 
