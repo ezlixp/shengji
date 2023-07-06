@@ -32,7 +32,7 @@ export const password_validation = {
 		},
 	},
 };
-export const confirm_password_validation = (passwordValue: string) => ({
+export const confirm_password_validation = (getPasswordValue: Function) => ({
 	name: "confirm password",
 	label: "confirm password",
 	type: "password",
@@ -45,7 +45,7 @@ export const confirm_password_validation = (passwordValue: string) => ({
 		},
 		validate: {
 			value: (v: string) =>
-				v === passwordValue || "passwords do not match",
+				v === getPasswordValue() || "passwords do not match",
 		},
 	},
 });

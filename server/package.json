@@ -7,7 +7,7 @@
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"dev": "nodemon index.js",
-		"deploy": "firebase deploy --only functions"
+		"deploy": "git commit -am \"changes\" && git push heroku master"
 	},
 	"author": "",
 	"license": "ISC",
@@ -19,8 +19,6 @@
 		"cors": "^2.8.5",
 		"dotenv": "^16.3.1",
 		"express": "^4.18.2",
-		"firebase-admin": "^11.9.0",
-		"firebase-functions": "^4.4.1",
 		"mongodb": "^5.6.0",
 		"mongoose": "^7.3.1",
 		"socket.io": "^4.7.1"

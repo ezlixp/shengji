@@ -40,7 +40,7 @@ export default function GameProvider(props: childrenProps) {
 		setPlaying: setPlaying,
 	};
 
-	// console.log(value.socket);
+	console.log(value.socket);
 	return (
 		<GameContext.Provider value={value}>
 			{props.children}

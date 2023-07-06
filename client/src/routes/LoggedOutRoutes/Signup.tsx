@@ -12,16 +12,15 @@ import axios from "axios";
 
 export default function SignUp() {
 	const methods = useForm();
-	const [email, setEmail] = useState<string | null>();
-	const [password, setPassword] = useState<string | null>();
 	const { currentUser, signup } = useAuth();
 	const [error, setError] = useState<string | null>();
 	const [loading, setLoading] = useState(false);
 	const navigate = useNavigate();
-	async function createUser() {
+	async function createUser(email: string, password: string) {
 		try {
 			setError("");
 			setLoading(true);
+			// console.log(email + " " + password);
 			await signup(email, password);
 			await axios.post(
 				`${import.meta.env.VITE_REACT_APP_BASE_URL}createUser`,
@@ -31,19 +30,21 @@ export default function SignUp() {
 				}
 			);
 			navigate("/");
-		} catch {
-			setError("Failed to create an account");
+		} catch (error) {
+			setError(`Failed to create an account with error ${error}`);
 		}
 		setLoading(false);
 	}
+
+	const getPasswordValue = () => {
+		return methods.getValues("password");
+	};
 
 	const handleSubmit = methods.handleSubmit((data) => {
 		// console.log(data);
 		methods.reset();
 		// console.log(data.email + " " + data.password);
-		setEmail(data.email);
-		setPassword(data.password);
-		createUser();
+		createUser(data.email, data.password);
 	});
 
 	return (
@@ -53,11 +54,7 @@ export default function SignUp() {
 				<form onSubmit={(e) => e.preventDefault()} noValidate>
 					<Input {...email_validation} />
 					<Input {...password_validation} />
-					<Input
-						{...confirm_password_validation(
-							methods.getValues("password")
-						)}
-					/>
+					<Input {...confirm_password_validation(getPasswordValue)} />
 					<button disabled={loading} onClick={handleSubmit}>
 						Sign up!
 					</button>
