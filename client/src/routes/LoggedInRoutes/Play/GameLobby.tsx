@@ -1,10 +1,9 @@
 import { useState } from "react";
-import defaultProps from "../../../types/defaultProps";
-import { useGame } from "./GameContext";
+import { useGame } from "./Context/GameContext";
 
 type GameLobbyProps = {};
 
-export default function GameLobby(props: defaultProps<GameLobbyProps>) {
+export default function GameLobby({}: GameLobbyProps) {
 	const [error, setError] = useState("");
 
 	const { players, setPlaying } = useGame();
@@ -17,9 +16,14 @@ export default function GameLobby(props: defaultProps<GameLobbyProps>) {
 		}
 	};
 	return (
-		<div className={props.className}>
-			{error}
+		<>
+			{error && (
+				<>
+					{error}
+					<br />
+				</>
+			)}
 			<button onClick={tryStart}>start game!</button>
-		</div>
+		</>
 	);
 }

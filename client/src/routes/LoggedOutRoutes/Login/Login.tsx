@@ -1,46 +1,60 @@
 import { useState } from "react";
 import { useAuth } from "../../../contexts/authContext";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styles from "./Login.module.css";
 import { FormProvider, useForm } from "react-hook-form";
 import Input from "../../../components/Input/Input";
 import {
-	email_validation,
 	password_validation,
+	username_or_email_validation,
 } from "../../../utils/inputValidations";
+import axios from "axios";
 
 export default function Login() {
-	const methods = useForm();
-	const { login } = useAuth();
+	const methods = useForm({ mode: "onChange" });
+	const { login, errorMessages, authing, setAuthing } = useAuth();
 	const [error, setError] = useState<string>("");
-	const [loading, setLoading] = useState(false);
-	const navigate = useNavigate();
 
 	const onSubmit = methods.handleSubmit(async (data) => {
-		console.log(data);
 		methods.reset();
-		console.log(data.email + " " + data.password);
 		try {
-			setLoading(true);
+			setAuthing(true);
 			setError("");
-			await login(data.email, data.password);
-			navigate("/");
-		} catch {
-			setError("Username or password incorrect");
+			const temp = await axios.post(
+				`${import.meta.env.VITE_REACT_APP_BASE_URL}getUser`,
+				{ username: data.username }
+			);
+			const username = temp.data ? temp.data[0].email : data.username;
+			login(username, data.password).catch((err: any) => {
+				if (err.code in errorMessages) {
+					setError(
+						errorMessages[err.code as keyof typeof errorMessages]
+					);
+				} else {
+					setError(err.message);
+				}
+			});
+		} catch (err: any) {
+			setError(err);
+		} finally {
+			setAuthing(false);
 		}
-		setLoading(false);
 	});
 	return (
 		<>
 			<div className={styles.container}>
-				<div className={styles["sign-in-card"]}>
+				<div className={styles["log-in-card"]}>
 					<h1>Log in</h1>
-					{error && error}
+					{typeof error === "string" && error}
 					<FormProvider {...methods}>
-						<form onSubmit={(e) => e.preventDefault()} noValidate>
-							<Input {...email_validation} />
+						<form
+							className={styles["log-in-form"]}
+							onSubmit={(e) => e.preventDefault()}
+							noValidate
+						>
+							<Input {...username_or_email_validation} />
 							<Input {...password_validation} />
-							<button disabled={loading} onClick={onSubmit}>
+							<button disabled={authing} onClick={onSubmit}>
 								Log in!
 							</button>
 						</form>

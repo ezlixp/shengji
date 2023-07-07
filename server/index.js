@@ -31,6 +31,16 @@ app.post("/createUser", (req, res) => {
 		});
 });
 
+app.post("/getUser", (req, res) => {
+	userModel
+		.find(req.body)
+		.exec()
+		.then((r) => {
+			if (r.length > 0) res.send(r);
+			else res.send(false);
+		});
+});
+
 const io = new Server(server, {
 	// host server completely seperately (heroku???, idk)
 	cors: {
@@ -44,23 +54,64 @@ io.on("connection", (socket) => {
 
 	socket.on("send_message", (data) => {
 		console.log(data);
-		io.in(data.lobby).emit("receive_message", data);
+		io.in(data.lobby).emit("receive_message", {
+			message: data.message,
+			from: socket.profile.username,
+		});
 	});
 
 	socket.on("join_game", async (data) => {
 		socket.join(data.lobby);
 		const sockets = await io.in(data.lobby).fetchSockets();
-		const socketIds = sockets.map((socket) => socket.id);
-		console.log(
-			`user ${socket.id} connected to lobby ${data.lobby} now with users ${socketIds}`
-		);
-		io.in(data.lobby).emit("receive_players", { players: socketIds });
+		const socketProfiles = sockets.map((s) => {
+			if (socket.profile.email === s.profile.email && s.id != socket.id) {
+				s.disconnect();
+			} else {
+				console.log(s.profile, socket.id, s.id);
+				return s.profile;
+			}
+			// return s.profile;
+		});
+		console.log(`user ${socket.id} connected to lobby ${data.lobby} `);
+		io.in(data.lobby).emit("receive_players", { players: socketProfiles });
+	});
+
+	socket.on("set_profile", (profile) => {
+		// console.log("profiling", profile);
+		socket.profile = profile;
+	});
+
+	// super secret commands here :scream:
+	socket.on("/test_win", (args) => {
+		let response = "";
+		// console.log(args);
+		if (args.length != 5) {
+			response = `expected 5 arguments, got ${args.length}`;
+		} else {
+			args = args.map(Number);
+			if (args.includes(NaN)) {
+				response = "expected integers";
+			} else {
+				let team1 = (args[0] + args[1]) / 2;
+				let team2 = (args[2] + args[3]) / 2;
+				console.log(args);
+				let e1 = 1 / (1 + Math.pow(10, (team2 - args[0]) / 400));
+				let e2 = 1 / (1 + Math.pow(10, (team2 - args[1]) / 400));
+				let e3 = 1 / (1 + Math.pow(10, (team1 - args[2]) / 400));
+				let e4 = 1 / (1 + Math.pow(10, (team1 - args[3]) / 400));
+				let newelo1 = Math.round(args[0] + args[4] * (1 - e1));
+				let newelo2 = Math.round(args[1] + args[4] * (1 - e2));
+				let newelo3 = Math.round(args[2] + args[4] * -e3);
+				let newelo4 = Math.round(args[3] + args[4] * -e4);
+				response = `after team one won, player 1's new elo is ${newelo1}, player 2's is ${newelo2}, player 3's is ${newelo3}, player 4's is ${newelo4}`;
+			}
+		}
+		io.to(socket.id).emit("receive_message", {
+			message: response,
+			from: "Command",
+		});
 	});
 });
-
-const PORT = process.env.PORT || 3000;
-server.listen(PORT);
-console.log(`running on port ${PORT}`);
 
 mongoose
 	.connect(process.env.DB_URL, {
@@ -71,3 +122,7 @@ mongoose
 	.catch((error) => {
 		console.log(error);
 	});
+
+const PORT = process.env.PORT || 3000;
+server.listen(PORT);
+console.log(`running on port ${PORT}`);

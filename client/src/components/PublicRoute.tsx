@@ -2,7 +2,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../contexts/authContext";
 
 export default function PublicRoute() {
-	const { currentUser } = useAuth();
+	const { currentUser, authing } = useAuth();
 
-	return !currentUser ? <Outlet /> : <Navigate to="/home" />;
+	return !currentUser || authing ? <Outlet /> : <Navigate to="/home" />;
 }

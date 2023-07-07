@@ -1,6 +1,7 @@
 import findInputError from "../../utils/findInputError";
 import { isFormInvalid } from "../../utils/isFormInvalid";
 import { useFormContext } from "react-hook-form";
+import styles from "./Input.module.css";
 
 type InputPropTypes = {
 	label: string;
@@ -30,11 +31,12 @@ export default function Input({
 		register,
 		formState: { errors },
 	} = useFormContext();
-	const inputError: InputErrorType = findInputError(errors, label);
+	// console.log(errors, name, validation);
+	const inputError: InputErrorType = findInputError(errors, name);
 	const isInvalid = isFormInvalid(inputError);
 
 	return (
-		<>
+		<div className={styles.input}>
 			{isInvalid && (
 				<InputError
 					message={inputError.error!.message}
@@ -48,7 +50,7 @@ export default function Input({
 				placeholder={placeholder}
 				{...register(name, validation)}
 			/>
-		</>
+		</div>
 	);
 }
 

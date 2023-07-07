@@ -12,17 +12,18 @@ export default function NavbarLoggedIn() {
 
 	async function handleLogout() {
 		if (!userMenuActive) return;
-		setError("");
-		try {
-			await logout();
-			navigate("/login");
-		} catch {
-			setError("Failed to log out, ur stuck in here FOREVER");
+		else {
+			setError("");
+			try {
+				logout().then(() => navigate("/login"));
+			} catch {
+				setError("Failed to log out, ur stuck in here FOREVER");
+			}
 		}
 	}
 
 	return (
-		<div className="z100">
+		<>
 			{error && error}
 			<nav className={styles.navbar}>
 				<Link className={styles.logo} to="/">
@@ -59,6 +60,6 @@ export default function NavbarLoggedIn() {
 					</ul>
 				</div>
 			</nav>
-		</div>
+		</>
 	);
 }

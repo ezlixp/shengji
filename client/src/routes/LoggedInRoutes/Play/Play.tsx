@@ -1,24 +1,43 @@
 import { useEffect } from "react";
-import defaultProps from "../../../types/defaultProps";
-import GameProvider from "./GameContext";
-import Chat from "./Chat";
-import GameLoader from "./GameLoader";
+import { useLocation } from "react-router-dom";
+import Chat from "./Chat/Chat";
+import { useGame } from "./Context/GameContext";
+import JoinLobby from "./JoinLobby";
+import ShengjiGame from "./ShengjiGame";
+import GameLobby from "./GameLobby";
+import Disconnected from "./Disconnected";
 
-type PlayProps = {};
+type Props = {};
 
-export default function Play(props: defaultProps<PlayProps>) {
-	// const { hash } = useLocation();
-	// const navigate = useNavigate();
+export default function Play({}: Props) {
+	const { inLobby, setInLobby, players, playing, connected } = useGame();
+	const { hash } = useLocation();
+
 	useEffect(() => {
-		console.log("play loaded");
-	});
+		setInLobby(false);
+	}, [hash]);
+
 	return (
-		<div className={props.className}>
-			<GameProvider>
-				<Chat />
-				<br />
-				<GameLoader />
-			</GameProvider>
-		</div>
+		<>
+			{connected ? (
+				<>
+					{inLobby ? (
+						<>
+							<Chat />
+							<ul>
+								{players.map((player) => {
+									return <li key={player}>{player}</li>;
+								})}
+							</ul>
+							{playing ? <ShengjiGame /> : <GameLobby />}
+						</>
+					) : (
+						<JoinLobby />
+					)}
+				</>
+			) : (
+				<Disconnected />
+			)}
+		</>
 	);
 }

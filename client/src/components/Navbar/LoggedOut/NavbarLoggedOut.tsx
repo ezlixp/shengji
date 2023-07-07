@@ -7,7 +7,7 @@ export default function NavbarLoggedOut() {
 	const [hide, setHide] = useState(false);
 
 	return (
-		<div className="z100">
+		<>
 			<nav className={styles.navbar}>
 				<Link className={styles.logo} to="/">
 					Shengji
@@ -64,6 +64,6 @@ export default function NavbarLoggedOut() {
 					</ul>
 				</div>
 			</nav>
-		</div>
+		</>
 	);
 }

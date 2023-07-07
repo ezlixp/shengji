@@ -1,10 +1,9 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import defaultProps from "../../../types/defaultProps";
-import { useGame } from "./GameContext";
+import { useGame } from "./Context/GameContext";
 
 type JoinLobbyProps = {};
 
-export default function JoinLobby(props: defaultProps<JoinLobbyProps>) {
+export default function JoinLobby({}: JoinLobbyProps) {
 	// const [code, setCode] = useState("");
 
 	const { hash } = useLocation();
@@ -19,12 +18,14 @@ export default function JoinLobby(props: defaultProps<JoinLobbyProps>) {
 		e.preventDefault();
 		if (hash) {
 			setInLobby(true);
-			socket.emit("join_game", { lobby: hash });
+			socket.emit("join_game", {
+				lobby: hash,
+			});
 		}
 	};
 
 	return (
-		<div className={props.className}>
+		<>
 			<form onSubmit={joinGame}>
 				<input
 					type="text"
@@ -36,6 +37,6 @@ export default function JoinLobby(props: defaultProps<JoinLobbyProps>) {
 				/>
 				<button type="submit">join/create game</button>
 			</form>
-		</div>
+		</>
 	);
 }
