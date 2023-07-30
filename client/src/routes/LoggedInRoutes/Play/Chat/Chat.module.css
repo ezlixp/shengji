@@ -1,14 +1,14 @@
 .chat-card {
-	width: clamp(20%, 225px, 50%);
-	float: right;
-	border: 1px solid #43454e;
-	margin-top: 20px;
+    width: clamp(20%, 225px, 50%);
+    float: right;
+    border: 1px solid #43454e;
+    margin-top: 20px;
 }
 
 .messages {
-	height: clamp(35.5svh, 400px, 88.8svh);
-	overflow-anchor: none;
-	overflow-y: auto;
-	padding-left: 10px;
-	padding-top: 10px;
+    height: clamp(35.5svh, 400px, 88.8svh);
+    overflow-anchor: none;
+    overflow-y: auto;
+    padding-left: 10px;
+    padding-top: 10px;
 }

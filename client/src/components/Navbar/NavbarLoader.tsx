@@ -3,11 +3,11 @@ import NavbarLoggedIn from "./LoggedIn/NavbarLoggedIn.tsx";
 import NavbarLoggedOut from "./LoggedOut/NavbarLoggedOut.tsx";
 
 export default function NavbarLoader() {
-	const { currentUser } = useAuth();
+    const { currentUser } = useAuth();
 
-	return (
-		<div className="z100">
-			{currentUser ? <NavbarLoggedIn /> : <NavbarLoggedOut />}
-		</div>
-	);
+    return (
+        <div className="z100">
+            {currentUser ? <NavbarLoggedIn /> : <NavbarLoggedOut />}
+        </div>
+    );
 }

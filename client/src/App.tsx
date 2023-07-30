@@ -11,37 +11,37 @@ import Home from "./routes/LoggedInRoutes/Home.tsx";
 import Provider from "./routes/LoggedInRoutes/Play/Context/Provider.tsx";
 
 export default function App() {
-	return (
-		<BrowserRouter>
-			<AuthProvider>
-				<NavbarLoader />
-				<div className="content">
-					<Routes>
-						{/* logged in routes */}
+    return (
+        <BrowserRouter>
+            <AuthProvider>
+                <NavbarLoader />
+                <div className="content">
+                    <Routes>
+                        {/* logged in routes */}
 
-						<Route element={<PrivateRoute />}>
-							<Route path="/home" element={<Home />} />
+                        <Route element={<PrivateRoute />}>
+                            <Route path="/home" element={<Home />} />
 
-							<Route path="/play" element={<Provider />} />
-						</Route>
+                            <Route path="/play" element={<Provider />} />
+                        </Route>
 
-						{/* logged out routes */}
+                        {/* logged out routes */}
 
-						<Route element={<PublicRoute />}>
-							<Route path="/" element={<Base />} />
+                        <Route element={<PublicRoute />}>
+                            <Route path="/" element={<Base />} />
 
-							<Route path="/login" element={<Login />} />
+                            <Route path="/login" element={<Login />} />
 
-							<Route path="/signup" element={<SignUp />} />
-						</Route>
+                            <Route path="/signup" element={<SignUp />} />
+                        </Route>
 
-						{/* neutral routes */}
+                        {/* neutral routes */}
 
-						<Route path="*" element={<NotFound />} />
-					</Routes>
-					{/* {import.meta.env.VITE_REACT_APP_FIREBASE_AUTH_DOMAIN} */}
-				</div>
-			</AuthProvider>
-		</BrowserRouter>
-	);
+                        <Route path="*" element={<NotFound />} />
+                    </Routes>
+                    {/* {import.meta.env.VITE_REACT_APP_FIREBASE_AUTH_DOMAIN} */}
+                </div>
+            </AuthProvider>
+        </BrowserRouter>
+    );
 }

@@ -1,10 +1,10 @@
 type InputErrorType = {
-	error?: ErrorType;
+    error?: ErrorType;
 };
 type ErrorType = {
-	message: string;
+    message: string;
 };
 export const isFormInvalid = (err: InputErrorType) => {
-	if (Object.keys(err).length > 0) return true;
-	return false;
+    if (Object.keys(err).length > 0) return true;
+    return false;
 };
