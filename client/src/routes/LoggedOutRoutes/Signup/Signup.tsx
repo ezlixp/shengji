@@ -3,11 +3,7 @@ import { useAuth } from "../../../contexts/authContext";
 import { Link } from "react-router-dom";
 import { useForm, FormProvider } from "react-hook-form";
 import Input from "../../../components/Input/Input";
-import {
-    email_validation,
-    password_validation,
-    username_validation,
-} from "../../../utils/inputValidations";
+import { email_validation, password_validation, username_validation } from "../../../utils/inputValidations";
 import axios from "axios";
 import styles from "./Signup.module.css";
 
@@ -17,40 +13,23 @@ export default function SignUp() {
     const [error, setError] = useState<string | null>();
     // const [loading, setLoading] = useState(false);
     // const navigate = useNavigate();
-    async function createUser(
-        username: string,
-        email: string,
-        password: string
-    ) {
-        if (
-            !(await axios.post(
-                `${import.meta.env.VITE_REACT_APP_BASE_URL}getUserByUsername`,
-                { username: username }
-            ))
-        ) {
+    async function createUser(username: string, email: string, password: string) {
+        console.log(await axios.post(`${import.meta.env.VITE_REACT_APP_BASE_URL}/getUser`, { username: username }));
+        if (!(await axios.post(`${import.meta.env.VITE_REACT_APP_BASE_URL}/getUser`, { username: username })).data) {
             try {
                 setError("");
                 setAuthing(true);
                 // console.log(email + " " + password);
                 signup(email, password)
                     .then(() => {
-                        axios.post(
-                            `${
-                                import.meta.env.VITE_REACT_APP_BASE_URL
-                            }createUser`,
-                            {
-                                username: username,
-                                email: email,
-                            }
-                        );
+                        axios.post(`${import.meta.env.VITE_REACT_APP_BASE_URL}/createUser`, {
+                            username: username,
+                            email: email,
+                        });
                     })
                     .catch((err: any) => {
                         if (err.code in errorMessages) {
-                            setError(
-                                errorMessages[
-                                    err.code as keyof typeof errorMessages
-                                ]
-                            );
+                            setError(errorMessages[err.code as keyof typeof errorMessages]);
                         } else {
                             setError(err.message);
                         }
@@ -61,6 +40,7 @@ export default function SignUp() {
                 setAuthing(false);
             }
         } else {
+            console.log(await axios.post(`${import.meta.env.VITE_REACT_APP_BASE_URL}/getUser`, { username: username }));
             setError("username taken");
         }
     }
@@ -78,11 +58,7 @@ export default function SignUp() {
                 <h1>Sign Up</h1>
                 {error && error}
                 <FormProvider {...methods}>
-                    <form
-                        className={styles["sign-up-form"]}
-                        onSubmit={(e) => e.preventDefault()}
-                        noValidate
-                    >
+                    <form className={styles["sign-up-form"]} onSubmit={(e) => e.preventDefault()} noValidate>
                         <Input {...username_validation} />
                         <Input {...email_validation} />
                         <Input {...password_validation} />

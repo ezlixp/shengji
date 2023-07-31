@@ -10,7 +10,7 @@ import Disconnected from "./Disconnected";
 type Props = {};
 
 export default function Play({}: Props) {
-    const { inLobby, setInLobby, players, playing, connected } = useGame();
+    const { inLobby, setInLobby, playing, connected } = useGame();
     const { hash } = useLocation();
 
     useEffect(() => {
@@ -24,11 +24,7 @@ export default function Play({}: Props) {
                     {inLobby ? (
                         <>
                             <Chat />
-                            <ul>
-                                {players.map((player) => {
-                                    return <li key={player}>{player}</li>;
-                                })}
-                            </ul>
+
                             {playing ? <ShengjiGame /> : <GameLobby />}
                         </>
                     ) : (

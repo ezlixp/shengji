@@ -21,7 +21,7 @@ export default function Login() {
             setAuthing(true);
             setError("");
             const temp = await axios.post(
-                `${import.meta.env.VITE_REACT_APP_BASE_URL}getUser`,
+                `${import.meta.env.VITE_REACT_APP_BASE_URL}/getUser`,
                 { username: data.username }
             );
             const username = temp.data ? temp.data[0].email : data.username;

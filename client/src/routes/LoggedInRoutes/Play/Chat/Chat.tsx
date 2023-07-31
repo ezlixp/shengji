@@ -21,14 +21,8 @@ export default function Chat({}: ChatProps) {
 
     const sendMessage = () => {
         if (message) {
-            if (
-                message.startsWith("/") &&
-                validCommands.includes(message.split(" ")[0])
-            ) {
-                socket.emit(
-                    message.split(" ")[0] as "secret_command",
-                    message.split(" ").slice(1)
-                );
+            if (message.startsWith("/") && validCommands.includes(message.split(" ")[0])) {
+                socket.emit(message.split(" ")[0] as "secret_command", message.split(" ").slice(1));
                 console.log("omg secret command!!!!");
             } else {
                 socket.emit("send_message", {
@@ -41,7 +35,9 @@ export default function Chat({}: ChatProps) {
     };
 
     useEffect(() => {
+        // data.message (string, message receieved), data.from (string, who sent the message), data.decoration (object, text decoration for the message)
         socket.on("receive_message", (data) => {
+            // data.message (string, message receieved), data.from (string, who sent the message)
             setReceived({ from: data.from, message: data.message });
         });
     }, []);
@@ -69,11 +65,7 @@ export default function Chat({}: ChatProps) {
                             sendMessage();
                         }}
                     >
-                        <input
-                            placeholder="Message..."
-                            value={message}
-                            onChange={(e) => setMessage(e.target.value)}
-                        />
+                        <input placeholder="Message..." value={message} onChange={(e) => setMessage(e.target.value)} />
                         <button type="submit">Send Message!</button>
                     </form>
                 </>
