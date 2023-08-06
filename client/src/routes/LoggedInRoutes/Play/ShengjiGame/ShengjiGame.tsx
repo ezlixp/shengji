@@ -1,18 +1,18 @@
 import { useState, useEffect } from "react";
 import { useGame } from "../Context/GameContext";
-import { useLocation } from "react-router-dom";
 import Card from "../components/Card/Card";
 import styles from "./Shengji.module.css";
+import BidOptions from "../BidOptions";
+import DisplayBids from "../DisplayBids";
 
 type ShengjiGameProps = {};
 
 export default function ShengjiGame({}: ShengjiGameProps) {
-    const suitOrder = { Diamonds: 1, Clubs: 2, Hearts: 3, Spades: 4 };
+    const suitOrder = { Diamonds: 1, Clubs: 2, Hearts: 3, Spades: 4, LJ: 5, HJ: 6 };
 
     const [turnNum, setTurnNum] = useState<number>(0);
     const [gameState, setGameState] = useState<string>("drawing"); // drawing, bidding, or playing
 
-    const { hash } = useLocation();
     const { socket, myTurnNum, cards, setCards, selected, setSelected, rankVals } = useGame();
 
     useEffect(() => {
@@ -23,8 +23,12 @@ export default function ShengjiGame({}: ShengjiGameProps) {
         socket.on("update_cards", (data) => {
             setCards((oldCards) =>
                 [...oldCards, data.nextCard].sort((a, b) => {
-                    // add sorting for trump and trump (mostly inbetween trump rank) don't forget to add in <card> too
-                    if (a.trump || b.trump) {
+                    // add sorting for trump and trump (mostly inbetween trump rank)
+                    if (a.trump && b.trump) {
+                        return (
+                            suitOrder[a.suit as keyof typeof suitOrder] - suitOrder[b.suit as keyof typeof suitOrder]
+                        );
+                    } else if (a.trump || b.trump) {
                         return rankVals[a.rank as keyof typeof rankVals] - rankVals[b.rank as keyof typeof rankVals];
                     } else {
                         if (a.suit !== b.suit) {
@@ -69,7 +73,6 @@ export default function ShengjiGame({}: ShengjiGameProps) {
                     timeout = setTimeout(
                         () =>
                             socket.emit("did_turn", {
-                                lobby: hash,
                                 gameState: gameState,
                                 nextTurn: (myTurnNum + 1) % 4,
                             }),
@@ -153,26 +156,31 @@ export default function ShengjiGame({}: ShengjiGameProps) {
     return (
         <>
             {/* <p>omg in game BEEEEEEP</p> */}
-            {/* do bids here, use last child css to make borders proper*/}
-            {selected.length === 0 && gameState === "playing" && <Card rank={"2"} suit={""} trump={false} />}
+            {gameState === "playing" ? <></> : <DisplayBids />} {/* when in game display trick instead of bids */}
+            {gameState !== "playing" && <BidOptions />}
+            {selected.length === 0 && gameState === "playing" && <Card rank={"2"} suit={""} trump={false} noHover />}
             <div className={styles.cards}>
                 <div className={styles.selected}>
-                    {selected.map((card, i) => {
-                        return (
-                            <span key={i} onClick={() => toggleSelect(card.rank, card.suit, card.trump, true)}>
-                                <Card rank={card.rank} suit={card.suit} trump={card.trump} />
-                            </span>
-                        );
-                    })}
+                    {selected.map((card, i) => (
+                        <Card
+                            key={i}
+                            onClick={() => toggleSelect(card.rank, card.suit, card.trump, true)}
+                            rank={card.rank}
+                            suit={card.suit}
+                            trump={card.trump}
+                        />
+                    ))}
                 </div>
                 <div className={styles.hand}>
-                    {cards.map((card, i) => {
-                        return (
-                            <span key={i} onClick={() => toggleSelect(card.rank, card.suit, card.trump, false)}>
-                                <Card rank={card.rank} suit={card.suit} trump={card.trump} />
-                            </span>
-                        );
-                    })}
+                    {cards.map((card, i) => (
+                        <Card
+                            key={i}
+                            onClick={() => toggleSelect(card.rank, card.suit, card.trump, false)}
+                            rank={card.rank}
+                            suit={card.suit}
+                            trump={card.trump}
+                        />
+                    ))}
                 </div>
             </div>
             <br />

@@ -1,18 +1,16 @@
 import { useEffect, useState } from "react";
 import { useGame } from "./Context/GameContext";
-import { useLocation } from "react-router-dom";
 
 type GameLobbyProps = {};
 
 export default function GameLobby({}: GameLobbyProps) {
     const [error, setError] = useState("");
 
-    const { hash } = useLocation();
     const { players, setPlayers, playing, setPlaying, setMyTurnNum, rankVals, setRankVals, socket } = useGame();
 
     const tryStart = () => {
         if (players.length === 4) {
-            socket.emit("start_game", { lobby: hash });
+            socket.emit("start_game");
         } else {
             setError("incorrect number of players");
         }

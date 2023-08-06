@@ -1,11 +1,17 @@
 .card {
     display: inline-block;
-    margin-right: -40px;
+    margin-right: -46.2px;
     user-select: none;
     position: relative;
+    height: 114px;
+    cursor: pointer;
 }
 
-.card:hover:not(.placeholder) svg {
+.card:last-of-type {
+    margin-right: 0px;
+}
+
+.card:hover:not(.no-hover) svg {
     transform: translateY(-20px);
 }
 

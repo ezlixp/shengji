@@ -1,6 +1,11 @@
 import { createContext, useContext, useMemo, useState, useEffect } from "react";
 import { Socket, io } from "socket.io-client";
-import { ClientToServerEvents, ServerToClientEvents, cardType } from "../../../../types/socketioTypes";
+import {
+    ClientToServerEvents,
+    ServerToClientEvents,
+    CardType,
+    PlayerProfileType,
+} from "../../../../types/socketioTypes";
 import { childrenProps } from "../../../../types/propTypes";
 import axios from "axios";
 import { useAuth } from "../../../../contexts/authContext";
@@ -8,25 +13,20 @@ import { useAuth } from "../../../../contexts/authContext";
 // console.log(import.meta.env.VITE_REACT_APP_BASE_URL);
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(import.meta.env.VITE_REACT_APP_BASE_URL);
 
-type playerDataType = {
-    _id: string;
-    username: string;
-    email: string;
-    elo: number;
-};
-
 type GameContextType = {
     socket: Socket<ServerToClientEvents, ClientToServerEvents>;
-    players: playerDataType[];
-    setPlayers: React.Dispatch<React.SetStateAction<playerDataType[]>>;
+    players: PlayerProfileType[];
+    setPlayers: React.Dispatch<React.SetStateAction<PlayerProfileType[]>>;
     inLobby: boolean;
     setInLobby: React.Dispatch<React.SetStateAction<boolean>>;
     playing: boolean;
     setPlaying: React.Dispatch<React.SetStateAction<boolean>>;
-    cards: cardType[];
-    setCards: React.Dispatch<React.SetStateAction<cardType[]>>;
-    selected: cardType[];
-    setSelected: React.Dispatch<React.SetStateAction<cardType[]>>;
+    cards: CardType[];
+    setCards: React.Dispatch<React.SetStateAction<CardType[]>>;
+    selected: CardType[];
+    setSelected: React.Dispatch<React.SetStateAction<CardType[]>>;
+    bids: CardType[][];
+    setBids: React.Dispatch<React.SetStateAction<CardType[][]>>;
     myTurnNum: number;
     setMyTurnNum: React.Dispatch<React.SetStateAction<number>>;
     rankVals: {
@@ -57,13 +57,14 @@ export function useGame() {
 }
 
 export default function GameProvider({ children }: childrenProps) {
-    const [players, setPlayers] = useState<playerDataType[]>([]);
+    const [players, setPlayers] = useState<PlayerProfileType[]>([]);
     const [playing, setPlaying] = useState(false);
     const [inLobby, setInLobby] = useState(false);
     const [connected, setConnected] = useState(true);
     const [loading, setLoading] = useState(true);
-    const [cards, setCards] = useState<cardType[]>([]);
-    const [selected, setSelected] = useState<cardType[]>([]);
+    const [cards, setCards] = useState<CardType[]>([]);
+    const [selected, setSelected] = useState<CardType[]>([]);
+    const [bids, setBids] = useState<CardType[][]>([]);
     const [myTurnNum, setMyTurnNum] = useState<number>(0);
     const [rankVals, setRankVals] = useState({
         "2": 2,
@@ -123,6 +124,8 @@ export default function GameProvider({ children }: childrenProps) {
         setCards: setCards,
         selected: selected,
         setSelected: setSelected,
+        bids: bids,
+        setBids: setBids,
         myTurnNum: myTurnNum,
         setMyTurnNum: setMyTurnNum,
         rankVals: rankVals,

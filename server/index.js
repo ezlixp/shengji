@@ -69,7 +69,6 @@ io.on("connection", (socket) => {
     socket.on("join_game", async (data) => {
         socket.join(data.lobby);
         socket.data.score = "2";
-        socket.data.trumpRank = "2";
         const sockets = await io.in(data.lobby).fetchSockets();
         const socketProfiles = sockets
             .map((s) => {
@@ -85,10 +84,18 @@ io.on("connection", (socket) => {
                 else return false;
             });
         let landlordOffset = 0;
+        let hasLandlord = false;
+        const gameData = {
+            landLord: hasLandlord ? landlordOffset : -1,
+            biddingRound: 0,
+            trumpRank: "2",
+            trumpSuit: "NT",
+        };
         sockets.map((s, i) => {
             if (s.data.landlord) {
                 landlordOffset = i;
-                socket.data.trumpRank = s.data.score;
+                hasLandlord = true;
+                gameData.trumpRank = s.data.score;
             }
         });
         sockets.map((s, i) => {
@@ -96,6 +103,7 @@ io.on("connection", (socket) => {
             if (turnNum < 0) {
                 turnNum += 4;
             }
+            socket.data.gameData = gameData;
             io.to(s.id).emit("set_turn_num", { turnNum: i });
         });
         console.log(`user ${socket.id} connected to lobby ${data.lobby} `);
@@ -108,23 +116,22 @@ io.on("connection", (socket) => {
         });
     });
 
-    socket.on("start_game", async (data) => {
-        console.log("started game!!!!");
-        io.in(data.lobby).emit("game_started", { trumpRank: socket.data.trumpRank });
+    socket.on("start_game", async () => {
+        io.in([...socket.rooms][1]).emit("game_started", { trumpRank: socket.data.gameData.trumpRank });
         const suits = ["Diamonds", "Clubs", "Hearts", "Spades"];
         const ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "LJ", "HJ"];
-        const sockets = await io.in(data.lobby).fetchSockets();
+        const sockets = await io.in([...socket.rooms][1]).fetchSockets();
         let deck = [];
         for (let i = 0; i < suits.length * 2; i++) {
             for (let x = 0; x < ranks.length; x++) {
                 let card = {
                     rank: ranks[x],
                     suit: suits[i % suits.length],
-                    trump: ranks[x] == socket.data.trumpRank || ranks[x] == "LJ" || ranks[x] == "HJ",
+                    trump: ranks[x] == socket.data.gameData.trumpRank || ranks[x] == "LJ" || ranks[x] == "HJ",
                 };
                 if (ranks[x] === "LJ" || ranks[x] === "HJ") {
                     if (suits[i % suits.length] === "Diamonds") {
-                        card.suit = "";
+                        card.suit = ranks[x];
                         deck.push(card);
                     }
                 } else {
@@ -142,19 +149,19 @@ io.on("connection", (socket) => {
             s.data.deck = deck;
             s.data.cards = [];
         });
-        io.in(data.lobby).emit("get_deck", { deck: deck });
+        io.in([...socket.rooms][1]).emit("get_deck", { deck: deck });
     });
 
     socket.on("did_turn", async (data) => {
         // data.gameState
-        const sockets = await io.in(data.lobby).fetchSockets();
+        const sockets = await io.in([...socket.rooms][1]).fetchSockets();
         switch (data.gameState) {
             case "drawing":
                 const card = socket.data.deck.pop();
                 // console.log(card);
                 // console.log("=========================");
                 if (socket.data.deck.length === 8) {
-                    io.in(data.lobby).emit("update_game_state", { nextGameState: "bidding" });
+                    io.in([...socket.rooms][1]).emit("update_game_state", { nextGameState: "bidding" });
                 }
                 io.to(socket.id).emit("update_cards", { nextCard: card });
                 break;
@@ -166,7 +173,15 @@ io.on("connection", (socket) => {
                 break;
         }
         await new Promise((resolve) => setTimeout(resolve, 100));
-        io.in(data.lobby).emit("next_turn", { nextTurn: data.nextTurn });
+        io.in([...socket.rooms][1]).emit("next_turn", { nextTurn: data.nextTurn });
+    });
+
+    socket.on("bid", (data) => {
+        // data.bid
+        socket.data.gameData.trumpSuit =
+            data.bid[0].suit === "HJ" || data.bid[0].suit === "LJ" ? "NT" : data.bid[0].suit;
+        console.log(socket.data.gameData);
+        io.in([...socket.rooms][1]).emit("new_bid", { new_bid: data.bid });
     });
 
     // super secret commands here :scream:

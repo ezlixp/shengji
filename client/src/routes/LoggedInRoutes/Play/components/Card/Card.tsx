@@ -4,9 +4,11 @@ type CardProps = {
     rank: string;
     suit: string;
     trump: boolean;
+    noHover?: boolean;
+    onClick?: React.MouseEventHandler;
 };
 
-export default function Card({ rank, suit, trump }: CardProps) {
+export default function Card({ onClick, rank, suit, trump, noHover = false }: CardProps) {
     const unicodeCards = {
         Diamonds: {
             "2": "🃂",
@@ -76,7 +78,7 @@ export default function Card({ rank, suit, trump }: CardProps) {
             LJ: "🃟",
             HJ: "🂿",
         },
-        "": {
+        LJ: {
             "2": "🂠",
             "3": "🂠",
             "4": "🂠",
@@ -91,6 +93,23 @@ export default function Card({ rank, suit, trump }: CardProps) {
             K: "🂠",
             A: "🂠",
             LJ: "🃟",
+            HJ: "🂠",
+        },
+        HJ: {
+            "2": "🂠",
+            "3": "🂠",
+            "4": "🂠",
+            "5": "🂠",
+            "6": "🂠",
+            "7": "🂠",
+            "8": "🂠",
+            "9": "🂠",
+            "10": "🂠",
+            J: "🂠",
+            Q: "🂠",
+            K: "🂠",
+            A: "🂠",
+            LJ: "🂠",
             HJ: "🂿",
         },
     };
@@ -99,11 +118,12 @@ export default function Card({ rank, suit, trump }: CardProps) {
         <div
             className={`${styles.card} ${
                 suit == "Diamonds" || suit == "Hearts" || rank == "HJ" ? styles.red : styles.white
-            } ${suit === "" && rank === "2" && styles.placeholder}`}
+            } ${noHover ? styles["no-hover"] : ""}`}
+            onClick={onClick}
         >
-            {trump && "😬"}
-            <svg focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" height="110" width="77">
-                <rect fill="#fff" x="-2" y="0" width="75" height="114"></rect>
+            {trump && !noHover && "😬"}
+            <svg focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" height="114" width="77">
+                <rect fill="#fff" x="-2" y="0" width="100" height="114"></rect>
                 <text
                     fill={
                         suit === "Diamonds" || suit === "Hearts" || rank === "HJ"
@@ -114,8 +134,8 @@ export default function Card({ rank, suit, trump }: CardProps) {
                     }
                     fontSize={"120px"}
                     textLength={"77px"}
-                    x={"-3"}
-                    y={"97"}
+                    x={"-1"}
+                    y={"99"}
                 >
                     {unicodeCards[suit as keyof typeof unicodeCards][rank as keyof (typeof unicodeCards)["Diamonds"]]}
                 </text>

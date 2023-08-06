@@ -18,6 +18,8 @@
     "typescript react props component": {
         "prefix": "tsrpc",
         "body": [
+            "import {} from \"react\"",
+            "",
             "type ${TM_FILENAME_BASE}Props = {}",
             "",
             "export default function ${TM_FILENAME_BASE}({}: ${TM_FILENAME_BASE}Props) {",
@@ -31,4 +33,3 @@
         "description": "functional component with default props in typescript"
     }
 }
-
