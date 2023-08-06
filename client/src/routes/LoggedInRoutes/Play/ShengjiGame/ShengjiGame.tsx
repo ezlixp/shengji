@@ -86,6 +86,9 @@ export default function ShengjiGame({}: ShengjiGameProps) {
     }, [turnNum]);
 
     function toggleSelect(rank: string, suit: string, trump: boolean, s: boolean) {
+        if (gameState !== "playing") {
+            return;
+        }
         if (s) {
             setSelected((old) =>
                 old.filter(
@@ -150,6 +153,8 @@ export default function ShengjiGame({}: ShengjiGameProps) {
     return (
         <>
             {/* <p>omg in game BEEEEEEP</p> */}
+            {/* do bids here, use last child css to make borders proper*/}
+            {selected.length === 0 && gameState === "playing" && <Card rank={"2"} suit={""} trump={false} />}
             <div className={styles.cards}>
                 <div className={styles.selected}>
                     {selected.map((card, i) => {
@@ -159,7 +164,6 @@ export default function ShengjiGame({}: ShengjiGameProps) {
                             </span>
                         );
                     })}
-                    {selected.length === 0 && <Card rank={"2"} suit={""} trump={false} />}
                 </div>
                 <div className={styles.hand}>
                     {cards.map((card, i) => {

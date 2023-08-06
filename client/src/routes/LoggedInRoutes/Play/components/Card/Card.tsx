@@ -54,7 +54,7 @@ export default function Card({ rank, suit, trump }: CardProps) {
             "10": "🂺",
             J: "🂻",
             Q: "🂽",
-            K: "🂽",
+            K: "🂾",
             A: "🂱",
             LJ: "🃟",
             HJ: "🂿",
