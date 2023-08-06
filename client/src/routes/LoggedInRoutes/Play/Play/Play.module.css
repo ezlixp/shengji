@@ -1,0 +1,10 @@
+.content {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.left {
+    width: auto;
+    padding-left: 10px;
+    /* padding-right: 40px; */
+}

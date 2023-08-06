@@ -1,0 +1,18 @@
+.card {
+    display: inline-block;
+    margin-right: -40px;
+    user-select: none;
+    position: relative;
+}
+
+.card:hover:not(.placeholder) svg {
+    transform: translateY(-20px);
+}
+
+.red {
+    color: rgb(187, 3, 19);
+}
+
+.white {
+    color: white;
+}

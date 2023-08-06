@@ -1,14 +1,13 @@
 import { useAuth } from "../../contexts/authContext";
-import NavbarLoggedIn from "./NavbarLoggedIn";
-import NavbarLoggedOut from "./NavbarLoggedOut";
-import defaultProps from "../../types/defaultProps";
+import NavbarLoggedIn from "./LoggedIn/NavbarLoggedIn.tsx";
+import NavbarLoggedOut from "./LoggedOut/NavbarLoggedOut.tsx";
 
-export default function NavbarLoader(props: defaultProps) {
-	const { currentUser } = useAuth();
+export default function NavbarLoader() {
+    const { currentUser } = useAuth();
 
-	return (
-		<div className={props.className}>
-			{currentUser ? <NavbarLoggedIn /> : <NavbarLoggedOut />}
-		</div>
-	);
+    return (
+        <div className="z100">
+            {currentUser ? <NavbarLoggedIn /> : <NavbarLoggedOut />}
+        </div>
+    );
 }

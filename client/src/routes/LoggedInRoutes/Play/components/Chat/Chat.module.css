@@ -1,0 +1,16 @@
+.chat-card {
+    width: clamp(20vw, 225px, 50vw);
+    border: 1px solid #43454e;
+    margin-top: 20px;
+    margin-left: auto;
+    align-self: flex-end;
+    flex-shrink: 0;
+}
+
+.messages {
+    height: clamp(35.5svh, 400px, 88.8svh);
+    overflow-anchor: none;
+    overflow-y: auto;
+    padding-left: 10px;
+    padding-top: 10px;
+}
