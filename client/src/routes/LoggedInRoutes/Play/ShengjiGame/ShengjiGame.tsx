@@ -159,6 +159,7 @@ export default function ShengjiGame({}: ShengjiGameProps) {
                             </span>
                         );
                     })}
+                    {selected.length === 0 && <Card rank={"2"} suit={""} trump={false} />}
                 </div>
                 <div className={styles.hand}>
                     {cards.map((card, i) => {

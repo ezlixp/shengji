@@ -5,7 +5,7 @@
     position: relative;
 }
 
-.card:hover svg {
+.card:hover:not(.placeholder) svg {
     transform: translateY(-20px);
 }
 
