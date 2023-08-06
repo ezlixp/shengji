@@ -1,8 +1,10 @@
 .chat-card {
-    width: clamp(20%, 225px, 50%);
-    float: right;
+    width: clamp(20vw, 225px, 50vw);
     border: 1px solid #43454e;
     margin-top: 20px;
+    margin-left: auto;
+    align-self: flex-end;
+    flex-shrink: 0;
 }
 
 .messages {

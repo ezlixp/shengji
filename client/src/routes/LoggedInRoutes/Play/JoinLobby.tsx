@@ -23,7 +23,6 @@ export default function JoinLobby({}: JoinLobbyProps) {
             });
         }
     };
-
     return (
         <>
             <form onSubmit={joinGame}>
@@ -34,6 +33,7 @@ export default function JoinLobby({}: JoinLobbyProps) {
                     onChange={(e) => {
                         navigate("#" + e.target.value.replace(" ", ""));
                     }}
+                    autoFocus
                 />
                 <button type="submit">join/create game</button>
             </form>

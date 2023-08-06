@@ -1,4 +1,4 @@
-import Play from "../Play";
+import Play from "../Play/Play";
 import GameProvider from "./GameContext";
 
 type PlayProps = {};

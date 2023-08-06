@@ -41,7 +41,10 @@ export default function GameLobby({}: GameLobbyProps) {
         });
 
         socket.on("game_started", (data) => {
-            rankVals[data.trumpRank as keyof typeof rankVals] = 15;
+            setRankVals({
+                ...rankVals,
+                [data.trumpRank as keyof typeof rankVals]: 15,
+            });
             setPlaying(true);
         });
 

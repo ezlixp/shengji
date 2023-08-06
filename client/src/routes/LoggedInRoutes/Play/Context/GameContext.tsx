@@ -18,15 +18,17 @@ type playerDataType = {
 type GameContextType = {
     socket: Socket<ServerToClientEvents, ClientToServerEvents>;
     players: playerDataType[];
-    setPlayers: Function;
+    setPlayers: React.Dispatch<React.SetStateAction<playerDataType[]>>;
     inLobby: boolean;
-    setInLobby: Function;
+    setInLobby: React.Dispatch<React.SetStateAction<boolean>>;
     playing: boolean;
-    setPlaying: Function;
+    setPlaying: React.Dispatch<React.SetStateAction<boolean>>;
     cards: cardType[];
-    setCards: Function;
+    setCards: React.Dispatch<React.SetStateAction<cardType[]>>;
+    selected: cardType[];
+    setSelected: React.Dispatch<React.SetStateAction<cardType[]>>;
     myTurnNum: number;
-    setMyTurnNum: Function;
+    setMyTurnNum: React.Dispatch<React.SetStateAction<number>>;
     rankVals: {
         "2": number;
         "3": number;
@@ -61,8 +63,25 @@ export default function GameProvider({ children }: childrenProps) {
     const [connected, setConnected] = useState(true);
     const [loading, setLoading] = useState(true);
     const [cards, setCards] = useState<cardType[]>([]);
+    const [selected, setSelected] = useState<cardType[]>([]);
     const [myTurnNum, setMyTurnNum] = useState<number>(0);
-    const [rankVals, setRankVals] = useState({ "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "9": 9, "10": 10, J: 11, Q: 12, K: 13, A: 14, LJ: 16, HJ: 17 });
+    const [rankVals, setRankVals] = useState({
+        "2": 2,
+        "3": 3,
+        "4": 4,
+        "5": 5,
+        "6": 6,
+        "7": 7,
+        "8": 8,
+        "9": 9,
+        "10": 10,
+        J: 11,
+        Q: 12,
+        K: 13,
+        A: 14,
+        LJ: 16,
+        HJ: 17,
+    });
 
     const { currentUser } = useAuth();
     const player = useMemo(async () => {
@@ -84,6 +103,7 @@ export default function GameProvider({ children }: childrenProps) {
             setLoading(false);
         });
         socket.on("disconnect", () => {
+            setCards([]);
             setConnected(false);
         });
         return () => {
@@ -101,6 +121,8 @@ export default function GameProvider({ children }: childrenProps) {
         setPlaying: setPlaying,
         cards: cards,
         setCards: setCards,
+        selected: selected,
+        setSelected: setSelected,
         myTurnNum: myTurnNum,
         setMyTurnNum: setMyTurnNum,
         rankVals: rankVals,

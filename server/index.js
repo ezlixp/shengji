@@ -165,6 +165,7 @@ io.on("connection", (socket) => {
                 console.log("SIT DOWN ( IHAVE TRACTRO)");
                 break;
         }
+        await new Promise((resolve) => setTimeout(resolve, 100));
         io.in(data.lobby).emit("next_turn", { nextTurn: data.nextTurn });
     });
 

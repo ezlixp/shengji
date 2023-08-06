@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useGame } from "../Context/GameContext";
+import { useGame } from "../../Context/GameContext";
 import { useLocation } from "react-router-dom";
 import styles from "./Chat.module.css";
 
